@@ -9,12 +9,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
-import { fabric } from "fabric";
+import { computed, defineComponent, onMounted } from 'vue'
+import { fabric } from 'fabric'
 
 export default defineComponent({
   setup() {
-    const canvas = computed<fabric.Canvas>(() => new fabric.Canvas("canvas"));
+    const canvas = computed<fabric.Canvas>(() => new fabric.Canvas('canvas'))
+
+    onMounted(() => {
+      const imageUrl = 'https://storage.googleapis.com/zenn-user-upload/avatar/845fa75ba8.jpeg'
+      fabric.Image.fromURL(imageUrl, image => {
+        image.scaleToWidth(canvas.value.getWidth())
+        canvas.value.setBackgroundImage(image, canvas.value.renderAll.bind(canvas.value))
+      })
+    })
 
     const add = () => {
       canvas.value.add(
@@ -23,24 +31,24 @@ export default defineComponent({
           left: 100,
           width: 60,
           height: 60,
-          fill: "red",
+          fill: 'red'
         })
-      );
-    };
+      )
+    }
 
     const save = () => {
-      const canvasState = JSON.stringify(canvas.value);
-      localStorage.setItem("state", canvasState);
-    };
+      const canvasState = JSON.stringify(canvas.value)
+      localStorage.setItem('state', canvasState)
+    }
 
     const load = () => {
-      const canvasState = localStorage.getItem("state");
-      canvas.value.loadFromJSON(canvasState, () => console.log("loaded!!"));
-    };
+      const canvasState = localStorage.getItem('state')
+      canvas.value.loadFromJSON(canvasState, () => {})
+    }
 
-    return { add, save, load };
-  },
-});
+    return { add, save, load }
+  }
+})
 </script>
 
 <style scoped>
