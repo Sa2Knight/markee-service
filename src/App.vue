@@ -1,6 +1,8 @@
 <template>
   <h1>Hello, Fabric!!</h1>
   <button @click="add">Add</button>
+  <button @click="save">Save</button>
+  <button @click="load">Load</button>
   <div class="wrapper">
     <canvas id="canvas" width="600" height="600" />
   </div>
@@ -26,7 +28,17 @@ export default defineComponent({
       );
     };
 
-    return { add };
+    const save = () => {
+      const canvasState = JSON.stringify(canvas.value);
+      localStorage.setItem("state", canvasState);
+    };
+
+    const load = () => {
+      const canvasState = localStorage.getItem("state");
+      canvas.value.loadFromJSON(canvasState, () => console.log("loaded!!"));
+    };
+
+    return { add, save, load };
   },
 });
 </script>
