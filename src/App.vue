@@ -3,6 +3,7 @@
   <button @click="add">Add</button>
   <button @click="save">Save</button>
   <button @click="load">Load</button>
+  <button @click="remove">remove</button>
   <div class="wrapper">
     <canvas id="canvas" width="600" height="600" />
   </div>
@@ -25,6 +26,10 @@ export default defineComponent({
       fabric.addRect({ width: 100, height: 100, fill: 'red' })
     }
 
+    const remove = () => {
+      fabric.removeSelectedObject()
+    }
+
     const save = () => {
       localStorage.setItem('state', fabric.toJSON())
     }
@@ -33,7 +38,7 @@ export default defineComponent({
       fabric.fromJSON(localStorage.getItem('state'))
     }
 
-    return { add, save, load }
+    return { add, remove, save, load }
   }
 })
 </script>

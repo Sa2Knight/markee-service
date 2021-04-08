@@ -9,6 +9,14 @@ export default function useFabric(canvasId: string) {
     canvas.value.add(object)
   }
 
+  const removeObject = (object: fabric.Object) => {
+    canvas.value.remove(object)
+  }
+
+  const removeSelectedObject = () => {
+    removeObject(canvas.value.getActiveObject())
+  }
+
   const addRect = (options: IRectOptions) => {
     const rect = new fabric.Rect(options)
     addObject(rect)
@@ -29,5 +37,5 @@ export default function useFabric(canvasId: string) {
     return JSON.stringify(canvas.value)
   }
 
-  return { addRect, setBackgroundImageFromUrl, fromJSON, toJSON }
+  return { addRect, removeSelectedObject, setBackgroundImageFromUrl, fromJSON, toJSON }
 }
