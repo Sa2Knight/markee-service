@@ -1,5 +1,5 @@
 <template>
-  <h1>Hello, Markee Service!!</h1>
+  <h1>Hello, Fabric!!</h1>
   <button @click="add">Add</button>
   <div class="wrapper">
     <canvas id="canvas" width="600" height="600" />
@@ -7,16 +7,12 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted } from "vue";
+import { computed, defineComponent } from "vue";
 import { fabric } from "fabric";
 
 export default defineComponent({
   setup() {
-    const canvas = ref<fabric.Canvas>(new fabric.Canvas(""));
-
-    onMounted(() => {
-      canvas.value = new fabric.Canvas("canvas");
-    });
+    const canvas = computed<fabric.Canvas>(() => new fabric.Canvas("canvas"));
 
     const add = () => {
       canvas.value.add(
@@ -29,6 +25,7 @@ export default defineComponent({
         })
       );
     };
+
     return { add };
   },
 });
