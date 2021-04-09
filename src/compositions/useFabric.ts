@@ -1,14 +1,17 @@
 import { fabric } from 'fabric'
 import { ICircleOptions, ILineOptions, IObjectOptions, IRectOptions, ITextOptions } from 'fabric/fabric-impl'
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 
-const THEME_COLOR = {
-  WHITE: 'rgb(255, 255, 255)',
-  ORANGE: 'rgb(246, 170, 0)'
-}
+export const THEME_COLOR = {
+  WHITE: '#ffffff',
+  ORANGE: '#f6aa00'
+} as const
 
 export default function useFabric(canvasId: string) {
   const canvas = computed<fabric.Canvas>(() => new fabric.Canvas(canvasId))
+  const state = reactive({
+    selectedObject: null as fabric.Object | null
+  })
 
   const defaultObjectOption = computed<IObjectOptions>(() => ({
     width: canvas.value.getWidth() / 2,
@@ -18,6 +21,25 @@ export default function useFabric(canvasId: string) {
     stroke: THEME_COLOR.WHITE,
     strokeWidth: 5
   }))
+
+  const init = (backGroundUrl: string) => {
+    fabric.Image.fromURL(backGroundUrl, image => {
+      image.scaleToWidth(canvas.value.getWidth())
+      canvas.value.setBackgroundImage(image, canvas.value.renderAll.bind(canvas.value))
+    })
+
+    canvas.value.on('selection:created', () => updateSelectedObject())
+    canvas.value.on('selection:updated', () => updateSelectedObject())
+    canvas.value.on('selection:cleared', () => clearSelectedObject())
+  }
+
+  const updateSelectedObject = () => {
+    state.selectedObject = canvas.value.getActiveObject()
+  }
+
+  const clearSelectedObject = () => {
+    state.selectedObject = null
+  }
 
   const addObject = (object: fabric.Object) => {
     canvas.value.add(object)
@@ -29,6 +51,7 @@ export default function useFabric(canvasId: string) {
 
   const removeSelectedObject = () => {
     removeObject(canvas.value.getActiveObject())
+    clearSelectedObject()
   }
 
   const addLine = (options: ILineOptions = {}) => {
@@ -64,13 +87,6 @@ export default function useFabric(canvasId: string) {
     addObject(textBox)
   }
 
-  const setBackgroundImageFromUrl = (url: string) => {
-    fabric.Image.fromURL(url, image => {
-      image.scaleToWidth(canvas.value.getWidth())
-      canvas.value.setBackgroundImage(image, canvas.value.renderAll.bind(canvas.value))
-    })
-  }
-
   const fromJSON = (json: string | null) => {
     canvas.value.loadFromJSON(json, () => {})
   }
@@ -80,12 +96,14 @@ export default function useFabric(canvasId: string) {
   }
 
   return {
+    state,
+    canvas,
+    init,
     addLine,
     addRect,
     addCircle,
     addTextBox,
     removeSelectedObject,
-    setBackgroundImageFromUrl,
     fromJSON,
     toJSON
   }
