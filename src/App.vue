@@ -1,9 +1,9 @@
 <template>
   <h1>Hello, Fabric!!</h1>
-  <button @click="fabric.addLine">AddLine</button>
-  <button @click="fabric.addRect">AddRect</button>
-  <button @click="fabric.addCircle">AddCircle</button>
-  <button @click="fabric.addTextBox">addTextBox</button>
+  <button @click="fabric.addLine">Line</button>
+  <button @click="fabric.addRect">Rect</button>
+  <button @click="fabric.addCircle">Circle</button>
+  <button @click="fabric.addTextBox">TextBox</button>
   <button @click="save">Save</button>
   <button @click="load">Load</button>
   <button @click="remove">remove</button>
