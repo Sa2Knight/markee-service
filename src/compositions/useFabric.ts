@@ -1,9 +1,20 @@
 import { fabric } from 'fabric'
-import { IRectOptions } from 'fabric/fabric-impl'
+import { IObjectOptions, IRectOptions, ITextOptions } from 'fabric/fabric-impl'
 import { computed } from 'vue'
+
+const THEME_COLOR = {
+  WHITE: 'rgb(255, 255, 255)',
+  ORANGE: 'rgb(246, 170, 0)'
+}
 
 export default function useFabric(canvasId: string) {
   const canvas = computed<fabric.Canvas>(() => new fabric.Canvas(canvasId))
+
+  const defaultObjectOption = computed<IObjectOptions>(() => ({
+    width: canvas.value.getWidth() / 2,
+    height: canvas.value.getHeight() / 2,
+    fill: THEME_COLOR.ORANGE
+  }))
 
   const addObject = (object: fabric.Object) => {
     canvas.value.add(object)
@@ -17,9 +28,20 @@ export default function useFabric(canvasId: string) {
     removeObject(canvas.value.getActiveObject())
   }
 
-  const addRect = (options: IRectOptions) => {
-    const rect = new fabric.Rect(options)
+  const addRect = (options: IRectOptions = {}) => {
+    const rect = new fabric.Rect({
+      ...defaultObjectOption.value,
+      ...options
+    })
     addObject(rect)
+  }
+
+  const addTextBox = (options: ITextOptions = {}) => {
+    const textBox = new fabric.Textbox('new text', {
+      ...defaultObjectOption.value,
+      ...options
+    })
+    addObject(textBox)
   }
 
   const setBackgroundImageFromUrl = (url: string) => {
@@ -37,5 +59,5 @@ export default function useFabric(canvasId: string) {
     return JSON.stringify(canvas.value)
   }
 
-  return { addRect, removeSelectedObject, setBackgroundImageFromUrl, fromJSON, toJSON }
+  return { addRect, addTextBox, removeSelectedObject, setBackgroundImageFromUrl, fromJSON, toJSON }
 }

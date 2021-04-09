@@ -1,6 +1,7 @@
 <template>
   <h1>Hello, Fabric!!</h1>
-  <button @click="add">Add</button>
+  <button @click="addRect">AddRect</button>
+  <button @click="addTextBox">addTextBox</button>
   <button @click="save">Save</button>
   <button @click="load">Load</button>
   <button @click="remove">remove</button>
@@ -22,8 +23,12 @@ export default defineComponent({
       fabric.setBackgroundImageFromUrl(imageUrl)
     })
 
-    const add = () => {
-      fabric.addRect({ width: 100, height: 100, fill: 'red' })
+    const addRect = () => {
+      fabric.addRect()
+    }
+
+    const addTextBox = () => {
+      fabric.addTextBox()
     }
 
     const remove = () => {
@@ -38,7 +43,7 @@ export default defineComponent({
       fabric.fromJSON(localStorage.getItem('state'))
     }
 
-    return { add, remove, save, load }
+    return { addTextBox, addRect, remove, save, load }
   }
 })
 </script>
