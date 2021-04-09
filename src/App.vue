@@ -7,7 +7,8 @@
   <button @click="load">Load</button>
   <button @click="remove">remove</button>
   <input type="color" v-model="state.color" />
-  <div class="wrapper">
+  {{ state.color }}
+  <div class="wrapper" :style="{ width: '600px', height: '600px', border: '1px solid' }">
     <canvas id="canvas" width="600" height="600" />
   </div>
 </template>
@@ -25,6 +26,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      console.log(fabric)
       fabric.init('https://storage.googleapis.com/zenn-user-upload/avatar/845fa75ba8.jpeg')
     })
 
@@ -63,11 +65,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-.wrapper {
-  width: 600px;
-  height: 600px;
-  border: 1px solid;
-}
-</style>
