@@ -1,9 +1,9 @@
 <template>
   <h1>Hello, Fabric!!</h1>
-  <button @click="addLine">AddLine</button>
-  <button @click="addRect">AddRect</button>
-  <button @click="addCircle">AddCircle</button>
-  <button @click="addTextBox">addTextBox</button>
+  <button @click="fabric.addLine">AddLine</button>
+  <button @click="fabric.addRect">AddRect</button>
+  <button @click="fabric.addCircle">AddCircle</button>
+  <button @click="fabric.addTextBox">addTextBox</button>
   <button @click="save">Save</button>
   <button @click="load">Load</button>
   <button @click="remove">remove</button>
@@ -25,26 +25,6 @@ export default defineComponent({
       fabric.setBackgroundImageFromUrl(imageUrl)
     })
 
-    const addLine = () => {
-      fabric.addLine()
-    }
-
-    const addRect = () => {
-      fabric.addRect()
-    }
-
-    const addCircle = () => {
-      fabric.addCircle()
-    }
-
-    const addTextBox = () => {
-      fabric.addTextBox()
-    }
-
-    const remove = () => {
-      fabric.removeSelectedObject()
-    }
-
     const save = () => {
       localStorage.setItem('state', fabric.toJSON())
     }
@@ -53,7 +33,11 @@ export default defineComponent({
       fabric.fromJSON(localStorage.getItem('state'))
     }
 
-    return { addLine, addTextBox, addRect, addCircle, remove, save, load }
+    const remove = () => {
+      fabric.removeSelectedObject()
+    }
+
+    return { fabric, save, load, remove }
   }
 })
 </script>
