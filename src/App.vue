@@ -1,6 +1,7 @@
 <template>
   <h1>Hello, Fabric!!</h1>
   <button @click="addRect">AddRect</button>
+  <button @click="addCircle">AddCircle</button>
   <button @click="addTextBox">addTextBox</button>
   <button @click="save">Save</button>
   <button @click="load">Load</button>
@@ -27,6 +28,10 @@ export default defineComponent({
       fabric.addRect()
     }
 
+    const addCircle = () => {
+      fabric.addCircle()
+    }
+
     const addTextBox = () => {
       fabric.addTextBox()
     }
@@ -43,7 +48,7 @@ export default defineComponent({
       fabric.fromJSON(localStorage.getItem('state'))
     }
 
-    return { addTextBox, addRect, remove, save, load }
+    return { addTextBox, addRect, addCircle, remove, save, load }
   }
 })
 </script>

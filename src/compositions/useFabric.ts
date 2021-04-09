@@ -1,5 +1,5 @@
 import { fabric } from 'fabric'
-import { IObjectOptions, IRectOptions, ITextOptions } from 'fabric/fabric-impl'
+import { ICircleOptions, IObjectOptions, IRectOptions, ITextOptions } from 'fabric/fabric-impl'
 import { computed } from 'vue'
 
 const THEME_COLOR = {
@@ -13,6 +13,7 @@ export default function useFabric(canvasId: string) {
   const defaultObjectOption = computed<IObjectOptions>(() => ({
     width: canvas.value.getWidth() / 2,
     height: canvas.value.getHeight() / 2,
+    radius: canvas.value.getWidth() / 4,
     fill: THEME_COLOR.ORANGE
   }))
 
@@ -34,6 +35,14 @@ export default function useFabric(canvasId: string) {
       ...options
     })
     addObject(rect)
+  }
+
+  const addCircle = (options: ICircleOptions = {}) => {
+    const circle = new fabric.Circle({
+      ...defaultObjectOption.value,
+      ...options
+    })
+    addObject(circle)
   }
 
   const addTextBox = (options: ITextOptions = {}) => {
@@ -59,5 +68,13 @@ export default function useFabric(canvasId: string) {
     return JSON.stringify(canvas.value)
   }
 
-  return { addRect, addTextBox, removeSelectedObject, setBackgroundImageFromUrl, fromJSON, toJSON }
+  return {
+    addRect,
+    addCircle,
+    addTextBox,
+    removeSelectedObject,
+    setBackgroundImageFromUrl,
+    fromJSON,
+    toJSON
+  }
 }
