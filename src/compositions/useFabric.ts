@@ -1,5 +1,5 @@
 import { fabric } from 'fabric'
-import { ICircleOptions, IObjectOptions, IRectOptions, ITextOptions } from 'fabric/fabric-impl'
+import { ICircleOptions, ILineOptions, IObjectOptions, IRectOptions, ITextOptions } from 'fabric/fabric-impl'
 import { computed } from 'vue'
 
 const THEME_COLOR = {
@@ -14,7 +14,9 @@ export default function useFabric(canvasId: string) {
     width: canvas.value.getWidth() / 2,
     height: canvas.value.getHeight() / 2,
     radius: canvas.value.getWidth() / 4,
-    fill: THEME_COLOR.ORANGE
+    fill: THEME_COLOR.ORANGE,
+    stroke: THEME_COLOR.WHITE,
+    strokeWidth: 5
   }))
 
   const addObject = (object: fabric.Object) => {
@@ -27,6 +29,14 @@ export default function useFabric(canvasId: string) {
 
   const removeSelectedObject = () => {
     removeObject(canvas.value.getActiveObject())
+  }
+
+  const addLine = (options: ILineOptions = {}) => {
+    const line = new fabric.Line([100, 200, 400, 600], {
+      ...defaultObjectOption.value,
+      ...options
+    })
+    addObject(line)
   }
 
   const addRect = (options: IRectOptions = {}) => {
@@ -48,6 +58,7 @@ export default function useFabric(canvasId: string) {
   const addTextBox = (options: ITextOptions = {}) => {
     const textBox = new fabric.Textbox('new text', {
       ...defaultObjectOption.value,
+      strokeWidth: 1,
       ...options
     })
     addObject(textBox)
@@ -69,6 +80,7 @@ export default function useFabric(canvasId: string) {
   }
 
   return {
+    addLine,
     addRect,
     addCircle,
     addTextBox,

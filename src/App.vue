@@ -1,5 +1,6 @@
 <template>
   <h1>Hello, Fabric!!</h1>
+  <button @click="addLine">AddLine</button>
   <button @click="addRect">AddRect</button>
   <button @click="addCircle">AddCircle</button>
   <button @click="addTextBox">addTextBox</button>
@@ -23,6 +24,10 @@ export default defineComponent({
       const imageUrl = 'https://storage.googleapis.com/zenn-user-upload/avatar/845fa75ba8.jpeg'
       fabric.setBackgroundImageFromUrl(imageUrl)
     })
+
+    const addLine = () => {
+      fabric.addLine()
+    }
 
     const addRect = () => {
       fabric.addRect()
@@ -48,7 +53,7 @@ export default defineComponent({
       fabric.fromJSON(localStorage.getItem('state'))
     }
 
-    return { addTextBox, addRect, addCircle, remove, save, load }
+    return { addLine, addTextBox, addRect, addCircle, remove, save, load }
   }
 })
 </script>
