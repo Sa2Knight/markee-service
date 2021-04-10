@@ -19,15 +19,20 @@ import useFabric from './compositions/useFabric'
 import { THEME_COLOR } from './compositions/useFabric'
 
 export default defineComponent({
-  setup() {
+  props: {
+    url: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
     const fabric = useFabric('canvas')
     const state = reactive({
       color: THEME_COLOR.ORANGE as string
     })
 
     onMounted(() => {
-      console.log(fabric)
-      fabric.init('https://storage.googleapis.com/zenn-user-upload/avatar/845fa75ba8.jpeg')
+      fabric.init(props.url)
     })
 
     watch(

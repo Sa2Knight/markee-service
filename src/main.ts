@@ -2,19 +2,21 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 class AppElement extends HTMLElement {
-  private div?: HTMLDivElement
+  private rootDiv?: HTMLDivElement
+  private url: string
 
   constructor() {
     super()
+    this.url = this.getAttribute('url') as string
   }
 
   connectedCallback() {
-    if (!this.div) {
-      this.div = document.createElement('div')
+    if (!this.rootDiv) {
+      this.rootDiv = document.createElement('div')
       // this.attachShadow({ mode: 'open' })
       // this.shadowRoot?.append(this.div)
-      this.append(this.div)
-      createApp(App).mount(this.div)
+      this.append(this.rootDiv)
+      createApp(App, { url: this.url }).mount(this.rootDiv)
     }
   }
 }
