@@ -7,11 +7,20 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
+  <style lang="css">
+    #index {
+      width: 70vw;
+      height: 70vh;
+      border: 2px dotted;
+    }
+  </style>
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <markee-service url="https://d3lwrqlm7hj79m.cloudfront.net/1/image/images/normal/e74497761aedb1de2c9b2ff0438e6e748fd5bbe5-2021-03-18T06:15:27Z.jpg" />
+    <div id="index">
+      <markee-service url="https://d3lwrqlm7hj79m.cloudfront.net/1/image/images/normal/e74497761aedb1de2c9b2ff0438e6e748fd5bbe5-2021-03-18T06:15:27Z.jpg" />
+    </div>
     <!-- built files will be auto injected -->
     <script>
       // インラインでやりたいよ

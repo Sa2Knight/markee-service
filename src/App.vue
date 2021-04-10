@@ -1,19 +1,25 @@
 <template>
-  <button @click="fabric.addLine">Line</button>
-  <button @click="() => fabric.addRect({ fill: state.color })">Rect</button>
-  <button @click="fabric.addCircle">Circle</button>
-  <button @click="fabric.addTextBox">TextBox</button>
-  <button @click="save">Save</button>
-  <button @click="remove">remove</button>
-  <input type="color" v-model="state.color" />
-  {{ state.color }}
-  <div class="wrapper" :style="{ width: '600px', height: '600px', border: '1px solid' }">
-    <canvas id="canvas" width="600" height="600" />
+  <div class="wrapper">
+    <div class="menu">
+      <div class="controls">
+        <button class="control" @click="fabric.addLine">Line</button>
+        <button class="control" @click="() => fabric.addRect({ fill: state.color })">Rect</button>
+        <button class="control" @click="fabric.addCircle">Circle</button>
+        <button class="control" @click="fabric.addTextBox">TextBox</button>
+        <button class="control" @click="remove">Remove</button>
+      </div>
+      <div class="options">
+        <input type="color" v-model="state.color" />
+      </div>
+    </div>
+    <div class="content" ref="elContent">
+      <canvas id="canvas" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive, watch, defineComponent, onMounted } from 'vue'
+import { ref, reactive, watch, defineComponent, onMounted } from 'vue'
 import useFabric from './compositions/useFabric'
 import { THEME_COLOR } from './compositions/useFabric'
 
@@ -30,11 +36,15 @@ export default defineComponent({
   },
   setup(props) {
     const fabric = useFabric('canvas')
+    const elContent = ref<HTMLDivElement | null>(null)
     const state = reactive({
       color: THEME_COLOR.ORANGE as string
     })
 
     onMounted(() => {
+      console.log(elContent.value?.clientHeight)
+      fabric.canvas.value.setWidth(elContent.value?.clientWidth || 300)
+      fabric.canvas.value.setHeight(elContent.value?.clientHeight || 300)
       fabric.init(props.url)
     })
 
@@ -65,7 +75,31 @@ export default defineComponent({
       fabric.removeSelectedObject()
     }
 
-    return { state, fabric, save, remove }
+    return { elContent, state, fabric, save, remove }
   }
 })
 </script>
+
+<style lang="scss">
+.wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  .menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20%;
+    height: 100%;
+    .controls {
+      .control {
+        width: 100%;
+      }
+    }
+  }
+  .content {
+    width: 80%;
+    height: 100%;
+  }
+}
+</style>

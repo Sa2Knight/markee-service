@@ -10,6 +10,8 @@ class AppElement extends HTMLElement {
   connectedCallback() {
     if (!this.rootDiv) {
       this.rootDiv = document.createElement('div')
+      this.rootDiv.style.width = '100%'
+      this.rootDiv.style.height = '100%'
       // this.attachShadow({ mode: 'open' })
       // this.shadowRoot?.append(this.div)
       this.append(this.rootDiv)
