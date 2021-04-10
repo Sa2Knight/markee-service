@@ -87,12 +87,8 @@ export default function useFabric(canvasId: string) {
     addObject(textBox)
   }
 
-  const fromJSON = (json: string | null) => {
-    canvas.value.loadFromJSON(json, () => {})
-  }
-
-  const toJSON = () => {
-    return JSON.stringify(canvas.value)
+  const toBase64 = () => {
+    return canvas.value.toDataURL({ format: 'png' })
   }
 
   return {
@@ -104,7 +100,6 @@ export default function useFabric(canvasId: string) {
     addCircle,
     addTextBox,
     removeSelectedObject,
-    fromJSON,
-    toJSON
+    toBase64
   }
 }

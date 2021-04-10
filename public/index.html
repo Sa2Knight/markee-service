@@ -11,9 +11,13 @@
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <markee-service
-      url="https://storage.googleapis.com/zenn-user-upload/avatar/845fa75ba8.jpeg"
-    />
+    <markee-service url="image.jpeg" />
     <!-- built files will be auto injected -->
+    <script>
+      // インラインでやりたいよ
+      document.querySelector('markee-service').addEventListener('onSave', (data) => {
+        console.log(data.detail)
+      })
+    </script>
   </body>
 </html>

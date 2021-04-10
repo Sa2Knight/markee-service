@@ -16,7 +16,12 @@ class AppElement extends HTMLElement {
       // this.attachShadow({ mode: 'open' })
       // this.shadowRoot?.append(this.div)
       this.append(this.rootDiv)
-      createApp(App, { url: this.url }).mount(this.rootDiv)
+      createApp(App, {
+        url: this.url,
+        onSave: (data: string) => {
+          this.dispatchEvent(new CustomEvent('onSave', { detail: data }))
+        }
+      }).mount(this.rootDiv)
     }
   }
 }

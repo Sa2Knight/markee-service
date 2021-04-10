@@ -4,7 +4,6 @@
   <button @click="fabric.addCircle">Circle</button>
   <button @click="fabric.addTextBox">TextBox</button>
   <button @click="save">Save</button>
-  <button @click="load">Load</button>
   <button @click="remove">remove</button>
   <input type="color" v-model="state.color" />
   {{ state.color }}
@@ -22,6 +21,10 @@ export default defineComponent({
   props: {
     url: {
       type: String,
+      required: true
+    },
+    onSave: {
+      type: Function,
       required: true
     }
   },
@@ -55,18 +58,14 @@ export default defineComponent({
     )
 
     const save = () => {
-      localStorage.setItem('state', fabric.toJSON())
-    }
-
-    const load = () => {
-      fabric.fromJSON(localStorage.getItem('state'))
+      props.onSave(fabric.toBase64())
     }
 
     const remove = () => {
       fabric.removeSelectedObject()
     }
 
-    return { state, fabric, save, load, remove }
+    return { state, fabric, save, remove }
   }
 })
 </script>
