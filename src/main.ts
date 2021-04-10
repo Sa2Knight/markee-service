@@ -3,11 +3,8 @@ import App from './App.vue'
 
 class AppElement extends HTMLElement {
   private rootDiv?: HTMLDivElement
-  private url: string
-
   constructor() {
     super()
-    this.url = this.getAttribute('url') as string
   }
 
   connectedCallback() {
@@ -17,7 +14,7 @@ class AppElement extends HTMLElement {
       // this.shadowRoot?.append(this.div)
       this.append(this.rootDiv)
       createApp(App, {
-        url: this.url,
+        url: this.getAttribute('url') as string,
         onSave: (data: string) => {
           this.dispatchEvent(new CustomEvent('onSave', { detail: data }))
         }
