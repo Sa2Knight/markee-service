@@ -9,7 +9,11 @@
         <button class="control" @click="remove">Remove</button>
       </div>
       <div class="options">
-        <BaseControls useFillOption useFontSizeOption v-model="state.controlOptions" />
+        <BaseControls
+          v-model="state.controlOptions"
+          :useFillOption="selectedObjectType !== 'line'"
+          :useFontSizeOption="selectedObjectType === 'textbox'"
+        />
       </div>
     </div>
     <div class="content" ref="elContent">
@@ -20,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, watch, defineComponent, onMounted } from 'vue'
+import { ref, reactive, computed, watch, defineComponent, onMounted } from 'vue'
 import useFabric from './compositions/useFabric'
 import BaseControls from './components/BaseControls.vue'
 
@@ -42,6 +46,8 @@ export default defineComponent({
     const state = reactive({
       controlOptions: {} as any
     })
+
+    const selectedObjectType = computed(() => fabric.state.selectedObject?.type)
 
     onMounted(() => {
       fabric.canvas.value.setWidth(elContent.value?.clientWidth || 300)
@@ -96,7 +102,7 @@ export default defineComponent({
       fabric.removeSelectedObject()
     }
 
-    return { elContent, state, fabric, save, remove }
+    return { elContent, state, fabric, selectedObjectType, save, remove }
   }
 })
 </script>
