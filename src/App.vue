@@ -9,7 +9,7 @@
         <button class="control" @click="remove">Remove</button>
       </div>
       <div class="options">
-        <BaseControls v-model="state.controlOptions" />
+        <BaseControls useFillOption useFontSizeOption v-model="state.controlOptions" />
       </div>
     </div>
     <div class="content" ref="elContent">
@@ -44,7 +44,6 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      console.log(elContent.value?.clientHeight)
       fabric.canvas.value.setWidth(elContent.value?.clientWidth || 300)
       fabric.canvas.value.setHeight(elContent.value?.clientHeight || 300)
       fabric.init(props.url)
@@ -58,6 +57,7 @@ export default defineComponent({
       option => {
         if (fabric.state.selectedObject) {
           fabric.state.selectedObject.setOptions({
+            fontSize: option.fontSize,
             fill: option.hasFill && option.fillColor,
             strokeWidth: Number(option.strokeSize),
             stroke: option.strokeColor
@@ -80,6 +80,9 @@ export default defineComponent({
             fillColor: newObject.fill,
             strokeColor: newObject.stroke,
             strokeSize: newObject.strokeWidth
+          }
+          if ('fontSize' in newObject) {
+            state.controlOptions.fontSize = newObject.fontSize
           }
         }
       }

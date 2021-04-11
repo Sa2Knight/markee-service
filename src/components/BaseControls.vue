@@ -1,6 +1,10 @@
 <template>
   <form class="rect-controls">
-    <div class="control">
+    <div v-if="props.useFontSizeOption" class="control">
+      <label>fontSize</label>
+      <input type="number" v-model="state.fontSize" min="80" max="120" />
+    </div>
+    <div v-if="props.useFillOption" class="control">
       <label>fill</label>
       <input type="checkbox" v-model="state.hasFill" />
       <input v-show="state.hasFill" type="color" v-model="state.fillColor" />
@@ -21,6 +25,7 @@ import { watch, reactive, defineComponent, onUpdated, computed } from '@vue/runt
 import { THEME_COLOR } from '../compositions/useFabric'
 
 type ControlOption = {
+  fontSize: number
   hasFill: boolean
   fillColor: string
   strokeSize: number
@@ -32,10 +37,19 @@ export default defineComponent({
     modelValue: {
       type: Object,
       required: true
+    },
+    useFontSizeOption: {
+      type: Boolean,
+      default: false
+    },
+    useFillOption: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, context) {
     const state = reactive<ControlOption>({
+      fontSize: 8,
       hasFill: true,
       fillColor: THEME_COLOR.ORANGE,
       strokeSize: 1,
@@ -45,6 +59,7 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       () => {
+        state.fontSize = props.modelValue.fontSize || 80
         state.hasFill = props.modelValue.hasFill || false
         state.fillColor = props.modelValue.fillColor || THEME_COLOR.ORANGE
         state.strokeSize = props.modelValue.strokeSize || 0
@@ -57,7 +72,7 @@ export default defineComponent({
       context.emit('update:modelValue', state)
     })
 
-    return { state }
+    return { props, state }
   }
 })
 </script>

@@ -10,7 +10,7 @@ export const THEME_COLOR = {
 export default function useFabric(canvasId: string) {
   const canvas = computed<fabric.Canvas>(() => new fabric.Canvas(canvasId))
   const state = reactive({
-    selectedObject: null as fabric.Object | null
+    selectedObject: null as fabric.Object | fabric.Textbox | null
   })
 
   const defaultObjectOption = computed<IObjectOptions>(() => ({
@@ -81,7 +81,7 @@ export default function useFabric(canvasId: string) {
   const addTextBox = (options: ITextOptions = {}) => {
     const textBox = new fabric.Textbox('new text', {
       ...defaultObjectOption.value,
-      fontSize: 120,
+      fontSize: 80,
       strokeWidth: 1,
       ...options
     })
