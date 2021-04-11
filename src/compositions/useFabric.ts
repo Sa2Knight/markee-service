@@ -81,6 +81,7 @@ export default function useFabric(canvasId: string) {
   const addTextBox = (options: ITextOptions = {}) => {
     const textBox = new fabric.Textbox('new text', {
       ...defaultObjectOption.value,
+      fontSize: 120,
       strokeWidth: 1,
       ...options
     })

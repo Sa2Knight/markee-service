@@ -9,7 +9,7 @@
         <button class="control" @click="remove">Remove</button>
       </div>
       <div class="options">
-        <RectControls v-model="state.controlOptions" />
+        <BaseControls v-model="state.controlOptions" />
       </div>
     </div>
     <div class="content" ref="elContent">
@@ -20,12 +20,12 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, watch, defineComponent, onMounted, onUpdated } from 'vue'
+import { ref, reactive, watch, defineComponent, onMounted } from 'vue'
 import useFabric from './compositions/useFabric'
-import RectControls from './components/RectControls.vue'
+import BaseControls from './components/BaseControls.vue'
 
 export default defineComponent({
-  components: { RectControls },
+  components: { BaseControls },
   props: {
     url: {
       type: String,
