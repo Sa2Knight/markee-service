@@ -9,21 +9,23 @@
         <button class="control" @click="remove">Remove</button>
       </div>
       <div class="options">
-        <input type="color" v-model="state.color" />
+        <RectControls v-model="state.controlOptions" />
       </div>
     </div>
     <div class="content" ref="elContent">
       <canvas id="canvas" />
     </div>
+    {{ state.controlOptions }}
   </div>
 </template>
 
 <script lang="ts">
-import { ref, reactive, watch, defineComponent, onMounted } from 'vue'
+import { ref, reactive, watch, defineComponent, onMounted, onUpdated } from 'vue'
 import useFabric from './compositions/useFabric'
-import { THEME_COLOR } from './compositions/useFabric'
+import RectControls from './components/RectControls.vue'
 
 export default defineComponent({
+  components: { RectControls },
   props: {
     url: {
       type: String,
@@ -38,7 +40,7 @@ export default defineComponent({
     const fabric = useFabric('canvas')
     const elContent = ref<HTMLDivElement | null>(null)
     const state = reactive({
-      color: THEME_COLOR.ORANGE as string
+      controlOptions: {} as any
     })
 
     onMounted(() => {
@@ -49,23 +51,28 @@ export default defineComponent({
     })
 
     watch(
-      () => state.color,
-      newColor => {
+      () => state.controlOptions,
+      option => {
         if (fabric.state.selectedObject) {
-          fabric.state.selectedObject.setOptions({ fill: newColor })
+          fabric.state.selectedObject.setOptions({
+            fill: option.hasFill && option.fillColor,
+            strokeWidth: Number(option.strokeSize),
+            stroke: option.strokeColor
+          })
           fabric.canvas.value.renderAndReset()
         }
-      }
+      },
+      { deep: true }
     )
 
-    watch(
-      () => fabric.state.selectedObject,
-      newObject => {
-        if (typeof newObject?.fill === 'string') {
-          state.color = newObject.fill
-        }
-      }
-    )
+    // watch(
+    //   () => fabric.state.selectedObject,
+    //   newObject => {
+    //     if (typeof newObject?.fill === 'string') {
+    //       state.color = newObject.fill
+    //     }
+    //   }
+    // )
 
     const save = () => {
       props.onSave(fabric.toBase64())
