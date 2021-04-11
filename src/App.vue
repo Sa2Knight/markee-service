@@ -3,7 +3,7 @@
     <div class="menu">
       <div class="controls">
         <button class="control" @click="fabric.addLine">Line</button>
-        <button class="control" @click="() => fabric.addRect({ fill: state.color })">Rect</button>
+        <button class="control" @click="() => fabric.addRect()">Rect</button>
         <button class="control" @click="fabric.addCircle">Circle</button>
         <button class="control" @click="fabric.addTextBox">TextBox</button>
         <button class="control" @click="remove">Remove</button>
@@ -50,6 +50,9 @@ export default defineComponent({
       fabric.init(props.url)
     })
 
+    /**
+     * コントロールUIからオブジェクト変更反映
+     */
     watch(
       () => state.controlOptions,
       option => {
@@ -65,14 +68,22 @@ export default defineComponent({
       { deep: true }
     )
 
-    // watch(
-    //   () => fabric.state.selectedObject,
-    //   newObject => {
-    //     if (typeof newObject?.fill === 'string') {
-    //       state.color = newObject.fill
-    //     }
-    //   }
-    // )
+    /**
+     * オブジェクトからコントロールUIへの変更反映
+     */
+    watch(
+      () => fabric.state.selectedObject,
+      newObject => {
+        if (newObject) {
+          state.controlOptions = {
+            hasFill: !!newObject.fill,
+            fillColor: newObject.fill,
+            strokeColor: newObject.stroke,
+            strokeSize: newObject.strokeWidth
+          }
+        }
+      }
+    )
 
     const save = () => {
       props.onSave(fabric.toBase64())

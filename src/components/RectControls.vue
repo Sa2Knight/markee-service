@@ -17,8 +17,15 @@
 </template>
 
 <script lang="ts">
-import { reactive, defineComponent, onUpdated, computed } from '@vue/runtime-core'
+import { watch, reactive, defineComponent, onUpdated, computed } from '@vue/runtime-core'
 import { THEME_COLOR } from '../compositions/useFabric'
+
+type ControlOption = {
+  hasFill: boolean
+  fillColor: string
+  strokeSize: number
+  strokeColor: string
+}
 
 export default defineComponent({
   props: {
@@ -28,18 +35,29 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const state = reactive({
-      hasFill: props.modelValue.hasFill || false,
-      fillColor: props.modelValue.fillColor || THEME_COLOR.ORANGE,
-      strokeSize: props.modelValue.strokeSize || 0,
-      strokeColor: props.modelValue.strokeColor || THEME_COLOR.ORANGE
+    const state = reactive<ControlOption>({
+      hasFill: true,
+      fillColor: THEME_COLOR.ORANGE,
+      strokeSize: 1,
+      strokeColor: THEME_COLOR.WHITE
     })
 
-    const strokeSizeNumber = computed(() => Number(state.strokeSize))
+    watch(
+      () => props.modelValue,
+      () => {
+        state.hasFill = props.modelValue.hasFill || false
+        state.fillColor = props.modelValue.fillColor || THEME_COLOR.ORANGE
+        state.strokeSize = props.modelValue.strokeSize || 0
+        state.strokeColor = props.modelValue.strokeColor || THEME_COLOR.WHITE
+      },
+      { immediate: true }
+    )
 
-    onUpdated(() => context.emit('update:modelValue', state))
+    onUpdated(() => {
+      context.emit('update:modelValue', state)
+    })
 
-    return { state, strokeSizeNumber }
+    return { state }
   }
 })
 </script>
